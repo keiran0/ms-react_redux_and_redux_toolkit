@@ -1,38 +1,32 @@
-import { createStore } from 'redux'
+import { createSlice, configureStore } from '@reduxjs/toolkit'
 
 const initialState = {
     counter:0,
     showCounter: true
 }
 
-const counterReducer = (state = initialState, action)=>{
-    if (action.type === 'increment') {
-        return { 
-            counter : state.counter += 1,
-            showCounter: state.showCounter
+const counterSlice = createSlice({
+    name: 'counter',
+    initialState,
+    reducers: {
+        increment(state){
+            state.counter++; //seems to be allowed to mutate the state. When using redux toolkit, we can't accidentally mutate the existing state. It automatically clones the state, keeps the unedited state, and overwrites the editing state in an immutable way.
+        },
+        decrement(state){
+            state.counter--;
+        },
+        increase(state, action){
+            state.counter = state.counter + action.payload; //payload is the default name of the property that will hold any extra data being dispatched
+        },
+        toggleCounter(state){
+            state.showCounter = !state.showCounter;
         }
     }
-    if (action.type === 'decrement') {
-        return { 
-            counter : state.counter -= 1,
-            showCounter: state.showCounter
-        }
-    }
-    if (action.type === 'increase') { //demonstrate with payload
-        return { 
-            counter : state.counter += action.amount,
-            showCounter: state.showCounter
-        }
-    }
-    if (action.type === 'toggle') {
-        return {
-            counter: state.counter,
-            showCounter: !state.showCounter
-        }
-    }
-    else return state
-}
+})
 
-const store = createStore(counterReducer)
+const store = configureStore({
+    reducer: counterSlice.reducer
+})
 
+export const counterActions = counterSlice.actions;
 export default store;

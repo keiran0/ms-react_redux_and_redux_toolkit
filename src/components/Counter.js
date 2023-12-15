@@ -1,28 +1,28 @@
 import classes from './Counter.module.css';
 import { useSelector, useDispatch } from 'react-redux'
 
+import { counterActions } from '../store/index.js';
+
 const Counter = () => {
   
   const dispatch = useDispatch()
   const counter = useSelector(state => state.counter)
   const show = useSelector(state => state.showCounter)
 
-  function incrementHandler(){
-    dispatch({type:'increment'})
+  const incrementHandler = ()=>{
+    dispatch(counterActions.increment())
   }
 
   function decrementHandler(){
-    dispatch({type:'decrement'})
+    dispatch(counterActions.decrement())
   }
 
   function increaseHandler(){
-    dispatch({type:'increase', amount: 5})
+    dispatch(counterActions.increase(5)) //automatically created: any value you pass as an argument will be stored in an extra field called 'payload'.
   }
 
   const toggleCounterHandler = () => { //arrow function. Doesn't matter, same as the above function form actually.
-    dispatch({
-      type: 'toggle'
-    })
+    dispatch(counterActions.toggleCounter());
   };
 
   return (
